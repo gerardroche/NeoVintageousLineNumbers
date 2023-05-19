@@ -20,7 +20,7 @@ def _is_command_mode(view) -> bool:
     return _is_normal_view(view) and view.settings().get('command_mode')
 
 
-class LineNumbersEvents(sublime_plugin.EventListener):
+class NeoVintageousLineNumbers(sublime_plugin.EventListener):
 
     def on_post_text_command(self, view, command_name, args):
         if view.settings().get('line_numbers'):
