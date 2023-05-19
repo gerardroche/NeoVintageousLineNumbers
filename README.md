@@ -8,4 +8,4 @@ A [NeoVintageous](https://github.com/NeoVintageous/NeoVintageous) plugin to auto
 
 https://github.com/wbond/package_control_channel/pull/8755
 
-Install NeoVintageousLineNumbers via [Package Control](https://packagecontrol.io/packages/NeoVintageousLineNumbers).
+Install via [Package Control](https://packagecontrol.io/packages/NeoVintageousLineNumbers).
