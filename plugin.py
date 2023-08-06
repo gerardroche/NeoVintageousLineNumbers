@@ -15,33 +15,48 @@
 # You should have received a copy of the GNU General Public License
 # along with NeoVintageousLineNumbers.  If not, see <https://www.gnu.org/licenses/>.
 
-import sublime
-import sublime_plugin
+# Support for Relative Line Numbers in Sublime Text >= 4074.
 
-# Relative line numbers is supported >= 4074.
+try:
+    from NeoVintageous.nv.listener import register
 
-if int(sublime.version()) >= 4050:
-    def _is_normal_view(view) -> bool:
-        return view and view.element() is None
-else:
-    def _is_normal_view(view) -> bool:
-        if not view:
-            return False
+    class Listener():
 
-        settings = view.settings()
+        def on_insert_enter(self, view, from_mode: str) -> None:
+            view.settings().set('relative_line_numbers', False)
 
-        return settings and not settings.get('is_widget', False)
+        def on_insert_leave(self, view, new_mode: str) -> None:
+            view.settings().set('relative_line_numbers', True)
 
+    register(Listener())
 
-def _is_command_mode(view) -> bool:
-    return _is_normal_view(view) and view.settings().get('command_mode')
+except ImportError:
 
+    # Support for NeoVintageous < 1.32.0
 
-class NeoVintageousLineNumbers(sublime_plugin.EventListener):
+    import sublime
+    import sublime_plugin
 
-    def on_post_text_command(self, view, command_name, args):
-        if view.settings().get('line_numbers'):
-            if _is_command_mode(view):
-                view.settings().set('relative_line_numbers', True)
-            else:
-                view.settings().set('relative_line_numbers', False)
+    if int(sublime.version()) >= 4050:
+        def _is_normal_view(view) -> bool:
+            return view and view.element() is None
+    else:
+        def _is_normal_view(view) -> bool:
+            if not view:
+                return False
+
+            settings = view.settings()
+
+            return settings and not settings.get('is_widget', False)
+
+    def _is_command_mode(view) -> bool:
+        return _is_normal_view(view) and view.settings().get('command_mode')
+
+    class NeoVintageousLineNumbers(sublime_plugin.EventListener):
+
+        def on_post_text_command(self, view, command_name, args):
+            if view.settings().get('line_numbers'):
+                if _is_command_mode(view):
+                    view.settings().set('relative_line_numbers', True)
+                else:
+                    view.settings().set('relative_line_numbers', False)
