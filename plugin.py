@@ -28,7 +28,7 @@ try:
         def on_insert_leave(self, view, new_mode: str) -> None:
             view.settings().set('relative_line_numbers', True)
 
-    register(Listener())
+    register(__package__, Listener())
 
 except ImportError:
 
